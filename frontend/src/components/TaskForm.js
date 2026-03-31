@@ -34,58 +34,55 @@ export function TaskForm({ onSubmit, loading }) {
   };
 
   return (
-    <div className="bg-[#141414] border border-[#2A2A2A] rounded-sm p-5">
+    <div className="bg-card border border-border rounded-2xl p-5 shadow-sm">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8A8A8A]">Task Ingestion</h2>
-        <Plus weight="bold" className="w-4 h-4 text-[#8A8A8A]" />
+        <h2 className="text-sm font-semibold text-foreground">New Task</h2>
+        <div className="w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center">
+          <Plus weight="bold" className="w-3.5 h-3.5 text-primary" />
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3">
         <Input
           data-testid="task-input"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="I need to..."
-          className="bg-[#0A0A0A] border-[#2A2A2A] text-[#EDEDED] rounded-sm placeholder:text-[#8A8A8A]/50 focus:ring-1 focus:ring-[#FF5500] focus:border-[#FF5500]"
+          placeholder="What needs to be done?"
+          className="rounded-xl h-10"
         />
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <Label className="text-[10px] uppercase tracking-[0.15em] text-[#8A8A8A] mb-1 block">Priority</Label>
+            <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1 block">Priority</Label>
             <Select value={priority} onValueChange={setPriority}>
-              <SelectTrigger
-                data-testid="priority-select"
-                className="bg-[#0A0A0A] border-[#2A2A2A] text-[#EDEDED] rounded-sm text-xs focus:ring-1 focus:ring-[#FF5500]"
-              >
+              <SelectTrigger data-testid="priority-select" className="rounded-xl text-xs h-9">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-[#141414] border-[#2A2A2A] text-[#EDEDED] rounded-sm">
-                <SelectItem value="3" className="text-xs focus:bg-[#1F1F1F] focus:text-[#EDEDED]">High (Critical)</SelectItem>
-                <SelectItem value="2" className="text-xs focus:bg-[#1F1F1F] focus:text-[#EDEDED]">Medium (Standard)</SelectItem>
-                <SelectItem value="1" className="text-xs focus:bg-[#1F1F1F] focus:text-[#EDEDED]">Low (Maintenance)</SelectItem>
+              <SelectContent className="rounded-xl">
+                <SelectItem value="3" className="text-xs">High</SelectItem>
+                <SelectItem value="2" className="text-xs">Medium</SelectItem>
+                <SelectItem value="1" className="text-xs">Low</SelectItem>
               </SelectContent>
             </Select>
           </div>
-
           <div>
-            <Label className="text-[10px] uppercase tracking-[0.15em] text-[#8A8A8A] mb-1 block">Deadline</Label>
+            <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1 block">Deadline</Label>
             <Popover open={calOpen} onOpenChange={setCalOpen}>
               <PopoverTrigger asChild>
                 <Button
                   data-testid="deadline-picker"
                   variant="outline"
-                  className="w-full justify-start text-left bg-[#0A0A0A] border-[#2A2A2A] text-[#EDEDED] rounded-sm text-xs hover:bg-[#1F1F1F] hover:text-[#EDEDED]"
+                  className="w-full justify-start text-left rounded-xl text-xs h-9"
                 >
-                  <CalendarBlank className="w-3.5 h-3.5 mr-1.5 text-[#8A8A8A]" />
+                  <CalendarBlank className="w-3.5 h-3.5 mr-1.5 text-muted-foreground" />
                   {deadline ? format(deadline, "MMM d") : "Pick date"}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 bg-[#141414] border-[#2A2A2A] rounded-sm" align="start">
+              <PopoverContent className="w-auto p-0 rounded-xl" align="start">
                 <Calendar
                   mode="single"
                   selected={deadline}
-                  onSelect={(d) => { if (d) { setDeadline(d); setCalOpen(false); }}}
-                  className="text-[#EDEDED]"
+                  onSelect={(d) => { if (d) { setDeadline(d); setCalOpen(false); } }}
                 />
               </PopoverContent>
             </Popover>
@@ -93,17 +90,14 @@ export function TaskForm({ onSubmit, loading }) {
         </div>
 
         <div>
-          <Label className="text-[10px] uppercase tracking-[0.15em] text-[#8A8A8A] mb-1 block">Category</Label>
+          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1 block">Category</Label>
           <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger
-              data-testid="category-select"
-              className="bg-[#0A0A0A] border-[#2A2A2A] text-[#EDEDED] rounded-sm text-xs focus:ring-1 focus:ring-[#FF5500]"
-            >
+            <SelectTrigger data-testid="category-select" className="rounded-xl text-xs h-9">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-[#141414] border-[#2A2A2A] text-[#EDEDED] rounded-sm">
+            <SelectContent className="rounded-xl">
               {CATEGORIES.map((c) => (
-                <SelectItem key={c} value={c} className="text-xs focus:bg-[#1F1F1F] focus:text-[#EDEDED]">{c}</SelectItem>
+                <SelectItem key={c} value={c} className="text-xs">{c}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -111,17 +105,14 @@ export function TaskForm({ onSubmit, loading }) {
 
         <div>
           <div className="flex justify-between mb-1">
-            <Label className="text-[10px] uppercase tracking-[0.15em] text-[#8A8A8A]">Cognitive Load</Label>
-            <span className="mono text-xs text-[#FF5500]" data-testid="complexity-display">{complexity}/10</span>
+            <Label className="text-[10px] uppercase tracking-wider text-muted-foreground">Cognitive Load</Label>
+            <span className="mono text-xs text-primary font-semibold" data-testid="complexity-display">{complexity}/10</span>
           </div>
           <Slider
             data-testid="complexity-slider"
             value={[complexity]}
             onValueChange={(v) => setComplexity(v[0])}
-            min={1}
-            max={10}
-            step={1}
-            className="[&_[role=slider]]:bg-[#FF5500] [&_[role=slider]]:border-[#FF5500] [&_.bg-primary]:bg-[#FF5500]"
+            min={1} max={10} step={1}
           />
         </div>
 
@@ -129,7 +120,7 @@ export function TaskForm({ onSubmit, loading }) {
           data-testid="task-submit-button"
           type="submit"
           disabled={loading || !text.trim()}
-          className="w-full bg-[#FF5500] hover:bg-[#CC4400] text-white rounded-sm font-semibold"
+          className="w-full rounded-xl h-10 font-semibold"
         >
           Commit Task
         </Button>

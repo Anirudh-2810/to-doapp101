@@ -3,10 +3,21 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Lightning, Check, Trash, Brain, SpinnerGap, Target } from "@phosphor-icons/react";
 
-const PRIORITY_STYLES = {
-  3: { label: "Critical", color: "text-[#FF3D00]", bg: "bg-[#FF3D00]/10", border: "border-[#FF3D00]/20" },
-  2: { label: "Standard", color: "text-[#FF5500]", bg: "bg-[#FF5500]/10", border: "border-[#FF5500]/20" },
-  1: { label: "Low", color: "text-[#8A8A8A]", bg: "bg-[#8A8A8A]/10", border: "border-[#8A8A8A]/20" },
+const PRIORITY_CONFIG = {
+  3: { label: "High", border: "border-l-rose-500", badge: "bg-rose-500/10 text-rose-600 dark:text-rose-400" },
+  2: { label: "Medium", border: "border-l-amber-500", badge: "bg-amber-500/10 text-amber-600 dark:text-amber-400" },
+  1: { label: "Low", border: "border-l-teal-500", badge: "bg-teal-500/10 text-teal-600 dark:text-teal-400" },
+};
+
+const CATEGORY_COLORS = {
+  "Deep Work": "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400",
+  "Email": "bg-rose-500/10 text-rose-600 dark:text-rose-400",
+  "Meetings": "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+  "Creative": "bg-violet-500/10 text-violet-600 dark:text-violet-400",
+  "Admin": "bg-slate-500/10 text-slate-600 dark:text-slate-400",
+  "Learning": "bg-blue-500/10 text-blue-600 dark:text-blue-400",
+  "Health": "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+  "General": "bg-muted text-muted-foreground",
 };
 
 export function ExecutionStack({ tasks, onComplete, onDelete, onAIAudit, aiInsights, aiLoading }) {
@@ -18,21 +29,18 @@ export function ExecutionStack({ tasks, onComplete, onDelete, onAIAudit, aiInsig
   };
 
   return (
-    <div className="bg-[#141414] border border-[#2A2A2A] rounded-sm flex flex-col min-h-[500px]">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 pb-4 border-b border-[#2A2A2A] gap-3">
+    <div className="bg-card border border-border rounded-2xl flex flex-col min-h-[500px] shadow-sm">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-5 pb-4 border-b border-border gap-3">
         <div>
-          <h2 className="text-lg font-semibold text-[#EDEDED]" style={{ fontFamily: "Manrope" }}>
-            Execution Stack
-          </h2>
-          <p className="text-xs text-[#8A8A8A] mt-0.5">Sorted by AI urgency & energy alignment</p>
+          <h2 className="text-base font-semibold text-foreground">Execution Stack</h2>
+          <p className="text-xs text-muted-foreground mt-0.5">Sorted by AI urgency & energy alignment</p>
         </div>
         <Button
           data-testid="ai-audit-button"
           onClick={handleAudit}
           disabled={aiLoading}
-          variant="outline"
           size="sm"
-          className="border-[#00E5FF]/30 text-[#00E5FF] bg-[#00E5FF]/5 hover:bg-[#00E5FF]/10 hover:text-[#00E5FF] rounded-sm text-xs"
+          className="rounded-xl text-xs"
         >
           {aiLoading ? (
             <SpinnerGap className="w-3.5 h-3.5 mr-1.5 animate-spin" />
@@ -44,68 +52,62 @@ export function ExecutionStack({ tasks, onComplete, onDelete, onAIAudit, aiInsig
       </div>
 
       {tasks.length === 0 ? (
-        <div className="flex-1 flex flex-col items-center justify-center text-center p-8 opacity-60">
-          <Target weight="duotone" className="w-12 h-12 text-[#8A8A8A] mb-3" />
-          <p className="text-[#8A8A8A] font-medium text-sm">Stack is empty</p>
-          <p className="text-[#8A8A8A]/60 text-xs mt-1">Ingest tasks to begin optimization</p>
+        <div className="flex-1 flex flex-col items-center justify-center text-center p-8">
+          <Target weight="duotone" className="w-14 h-14 text-muted-foreground/30 mb-3" />
+          <p className="text-muted-foreground font-medium text-sm">Stack is empty</p>
+          <p className="text-muted-foreground/60 text-xs mt-1">Ingest tasks to begin optimization</p>
         </div>
       ) : (
-        <div className="flex-1 overflow-y-auto" data-testid="task-list">
+        <div className="flex-1 overflow-y-auto p-3 space-y-2" data-testid="task-list">
           {tasks.map((task, idx) => {
-            const ps = PRIORITY_STYLES[task.priority] || PRIORITY_STYLES[2];
+            const pc = PRIORITY_CONFIG[task.priority] || PRIORITY_CONFIG[2];
+            const cc = CATEGORY_COLORS[task.category] || CATEGORY_COLORS["General"];
             return (
               <div
                 key={task.id}
                 data-testid={`task-item-${task.id}`}
-                className={`task-item flex flex-col sm:flex-row justify-between sm:items-center gap-3 px-5 py-3.5 border-b border-[#2A2A2A] relative ${
-                  task.is_optimal ? "bg-[#FF5500]/[0.03]" : ""
+                className={`task-item bg-background border border-border rounded-xl p-3.5 border-l-[3px] ${pc.border} animate-fade-up ${
+                  task.is_optimal ? "ring-1 ring-primary/20" : ""
                 }`}
                 style={{ animationDelay: `${idx * 40}ms` }}
               >
-                {task.is_optimal && (
-                  <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-[#FF5500] optimal-indicator" />
-                )}
-
-                <div className="flex items-start gap-3 flex-1 pl-1">
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded-sm ${ps.bg} ${ps.color} border ${ps.border} uppercase mono shrink-0 mt-0.5`}>
-                    P{task.priority}
-                  </span>
+                <div className="flex justify-between items-start gap-3">
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-[#EDEDED] text-sm leading-tight mb-1 truncate">{task.text}</h3>
-                    <div className="flex flex-wrap gap-x-2 gap-y-0.5 text-[10px] text-[#8A8A8A] mono uppercase">
-                      <span>Due: {task.deadline}</span>
-                      <span className="text-[#2A2A2A]">/</span>
-                      <span>Load: {task.complexity}/10</span>
-                      <span className="text-[#2A2A2A]">/</span>
-                      <span>{task.category}</span>
-                      <span className="text-[#2A2A2A]">/</span>
-                      <span className={task.is_optimal ? "text-[#FF5500]" : ""}>
-                        Score: {task.score}
+                    <h3 className="text-sm font-medium text-foreground leading-tight mb-1.5 truncate">{task.text}</h3>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-medium ${pc.badge}`}>
+                        {pc.label}
+                      </span>
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-medium ${cc}`}>
+                        {task.category}
+                      </span>
+                      <span className="text-[10px] text-muted-foreground mono">Due {task.deadline}</span>
+                      <span className="text-[10px] text-muted-foreground mono">Load {task.complexity}/10</span>
+                      <span className={`text-[10px] mono font-semibold ${task.is_optimal ? "text-primary" : "text-muted-foreground"}`}>
+                        Score {task.score}
                       </span>
                     </div>
                   </div>
-                </div>
-
-                <div className="flex items-center gap-1.5 shrink-0">
-                  <Button
-                    data-testid={`complete-task-${task.id}`}
-                    onClick={() => onComplete(task.id)}
-                    variant="ghost"
-                    size="sm"
-                    className="text-[#8A8A8A] hover:text-[#00C853] hover:bg-[#00C853]/10 rounded-sm h-7 px-2"
-                  >
-                    <Check weight="bold" className="w-3.5 h-3.5 mr-1" />
-                    <span className="text-xs">Execute</span>
-                  </Button>
-                  <Button
-                    data-testid={`delete-task-${task.id}`}
-                    onClick={() => onDelete(task.id)}
-                    variant="ghost"
-                    size="icon"
-                    className="text-[#8A8A8A] hover:text-[#FF3D00] hover:bg-[#FF3D00]/10 rounded-sm h-7 w-7"
-                  >
-                    <Trash weight="bold" className="w-3.5 h-3.5" />
-                  </Button>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <Button
+                      data-testid={`complete-task-${task.id}`}
+                      onClick={() => onComplete(task.id)}
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 px-2 text-muted-foreground hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg"
+                    >
+                      <Check weight="bold" className="w-3.5 h-3.5" />
+                    </Button>
+                    <Button
+                      data-testid={`delete-task-${task.id}`}
+                      onClick={() => onDelete(task.id)}
+                      variant="ghost"
+                      size="icon"
+                      className="h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg"
+                    >
+                      <Trash weight="bold" className="w-3.5 h-3.5" />
+                    </Button>
+                  </div>
                 </div>
               </div>
             );
@@ -114,25 +116,25 @@ export function ExecutionStack({ tasks, onComplete, onDelete, onAIAudit, aiInsig
       )}
 
       <Dialog open={showInsights} onOpenChange={setShowInsights}>
-        <DialogContent className="bg-[#141414] border-[#2A2A2A] text-[#EDEDED] rounded-sm max-w-lg">
+        <DialogContent className="rounded-2xl max-w-lg">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-[#EDEDED]" style={{ fontFamily: "Manrope" }}>
-              <Brain weight="duotone" className="w-5 h-5 text-[#00E5FF]" />
+            <DialogTitle className="flex items-center gap-2">
+              <Brain weight="duotone" className="w-5 h-5 text-primary" />
               AI Cognitive Analysis
             </DialogTitle>
-            <DialogDescription className="text-[#8A8A8A] text-xs">
+            <DialogDescription className="text-xs">
               Powered by GPT analysis of your task patterns
             </DialogDescription>
           </DialogHeader>
           <div className="mt-2" data-testid="ai-insights-content">
             {aiInsights?.type === "error" ? (
-              <p className="text-[#FF3D00] text-sm">{aiInsights.insights}</p>
+              <p className="text-destructive text-sm">{aiInsights.insights}</p>
             ) : aiInsights?.type === "success" ? (
-              <div className="text-sm text-[#EDEDED]/90 whitespace-pre-wrap leading-relaxed bg-[#0A0A0A] border border-[#2A2A2A] rounded-sm p-4 max-h-[400px] overflow-y-auto">
+              <div className="text-sm text-foreground/90 whitespace-pre-wrap leading-relaxed bg-muted rounded-xl p-4 max-h-[400px] overflow-y-auto">
                 {aiInsights.insights}
               </div>
             ) : (
-              <p className="text-[#8A8A8A] text-sm">No insights generated yet. Run an AI Audit first.</p>
+              <p className="text-muted-foreground text-sm">No insights generated yet.</p>
             )}
           </div>
         </DialogContent>
