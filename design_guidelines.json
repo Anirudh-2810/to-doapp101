@@ -1,0 +1,96 @@
+{
+  "theme": "dark",
+  "archetype": "Archetype 4: Swiss & High-Contrast (Dark Mode)",
+  "concept": "Velocity-One: A high-performance, command-center task engine. Designed for frictionless task ingestion and cognitive load management. Uses extreme high-contrast minimalist dark UI to eliminate distraction. Data is treated as instrumentation.",
+  "colors": {
+    "background": "#0A0A0A",
+    "surface": "#141414",
+    "surface_hover": "#1F1F1F",
+    "border": "#2A2A2A",
+    "primary": "#FF5500",
+    "primary_hover": "#CC4400",
+    "ai_accent": "#00E5FF",
+    "text_primary": "#EDEDED",
+    "text_secondary": "#8A8A8A",
+    "success": "#00C853",
+    "danger": "#FF3D00"
+  },
+  "typography": {
+    "headings": {
+      "family": "Manrope",
+      "weights": ["400", "700", "800"],
+      "tracking": "tracking-tight"
+    },
+    "body": {
+      "family": "IBM Plex Sans",
+      "weights": ["400", "500"]
+    },
+    "mono": {
+      "family": "JetBrains Mono",
+      "usage": "Velocity scores, algorithm weights, streak counters"
+    },
+    "scale": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl tracking-tighter",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl tracking-tight",
+      "h3": "text-xl sm:text-2xl",
+      "h4": "text-lg sm:text-xl",
+      "body": "text-base",
+      "small": "text-sm",
+      "overline": "text-xs uppercase tracking-[0.2em]"
+    }
+  },
+  "layout_and_spacing": {
+    "strategy": "Mode B: The Control Room Grid",
+    "grid_classes": "grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6",
+    "spacing_scale": "p-4, p-6 for standard cards; p-8 for feature panels. Ample breathing room inside containers.",
+    "alignment": "Left-align forms, data, and dense content. Center only explicit empty states or hero text."
+  },
+  "surfaces_and_borders": {
+    "dashboard_cards": "Flat background (bg-[#141414]), 1px solid border (border-[#2A2A2A]), no drop shadows. Strictly geometric.",
+    "active_state": "Slight lift (-translate-y-[2px]) and border color shift to border-[#FF5500]/50.",
+    "header": "Solid background (bg-[#0A0A0A]) with a hard 1px bottom border (border-[#2A2A2A]). No glassmorphism to maintain maximum clarity."
+  },
+  "components": {
+    "strategy": "Shadcn UI heavily customized to remove standard 'Vercel' look (no soft rounded corners, use rounded-none or max rounded-sm).",
+    "buttons": "Square or rounded-sm. Primary CTA uses bg-[#FF5500] text-[#EDEDED] hover:bg-[#CC4400].",
+    "energy_slider": "Shadcn Slider primitive. Track styled with a gradient towards #FF5500 to represent cognitive load.",
+    "task_list": "Grid Borders approach. border-collapse style where items have bottom borders (border-b border-[#2A2A2A]) instead of being individual cards.",
+    "calendar_panel": "Shadcn Calendar with customized day cells. Dark mode optimized with #FF5500 indicators for high-velocity days.",
+    "forms": "Shadcn Form, Input, Select primitives. bg-[#0A0A0A] inputs with strict #2A2A2A borders. focus:ring-1 focus:ring-[#FF5500]."
+  },
+  "motion_and_interactions": {
+    "hover": "Explicit text and border color changes. hover:text-[#EDEDED] hover:border-[#FF5500]",
+    "lists": "Framer Motion staggered entrance for the Execution Stack. transition: transform 0.2s ease, opacity 0.2s ease.",
+    "accessibility": "Respect prefers-reduced-motion. Focus states must have high contrast (focus:ring-2 focus:ring-[#FF5500])."
+  },
+  "icons_and_assets": {
+    "library": "@phosphor-icons/react",
+    "style": "Regular or Light weight for dashboard density. Duotone for empty states.",
+    "installation": "yarn add @phosphor-icons/react"
+  },
+  "media": {
+    "auth_background": {
+      "url": "https://images.unsplash.com/photo-1770745560263-a8fc696de90b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGRhcmslMjB0ZXh0dXJlfGVufDB8fHx8MTc3NDk3MTAzNnww&ixlib=rb-4.1.0&q=85",
+      "description": "Abstract dark texture. Use with a heavy black overlay (bg-black/80) to serve as a subtle texture for the Login/Auth screen background."
+    },
+    "empty_state_texture": {
+      "url": "https://images.pexels.com/photos/36013164/pexels-photo-36013164.png?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Close-up of a textured black surface. Use with low opacity (opacity-20) as a background for empty states in the Execution Stack or Velocity Dashboard."
+    }
+  },
+  "accessibility_and_testing": {
+    "testing_attributes": "All interactive elements MUST include data-testid (e.g., data-testid='task-submit-button', data-testid='energy-slider').",
+    "contrast": "Text over backgrounds must meet APCA standards. Use text-[#EDEDED] instead of pure white to reduce eye strain in dark mode."
+  },
+  "instructions_to_main_agent": [
+    "Strictly follow the Archetype 4 Swiss & High-Contrast palette. Do NOT introduce standard Tailwind blues/purples.",
+    "Build the dashboard using Mode B (Control Room Grid). Ensure h-full is used on grid children so cards match height.",
+    "Implement the priority algorithm scoring exactly as requested: S=(U×0.5)+(I×0.3)−(D×0.2).",
+    "Use JetBrains Mono for the Velocity Score Dashboard to give a technical, precise feel.",
+    "Apply Shadcn UI but override radius to rounded-sm or rounded-none for a sharper 'Control Center' look.",
+    "Use the provided Phosphor icons library for all iconography.",
+    "Integrate the Auth background image with a dark overlay to prevent distraction.",
+    "DO NOT use raw HTML inputs; strictly use Shadcn Form elements.",
+    "Ensure the Energy Slider visually reflects cognitive load."
+  ]
+}
